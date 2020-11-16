@@ -1,7 +1,7 @@
 import psycopg2
 
-PG_URL = "postgres://vxkyuztm:ceAbaeB1wa_qXyTY-GY3cc9-F1eDvOok@kandula.db.elephantsql.com:5432/vxkyuztm"
-connection = psycopg2.connect(PG_URL)
+PGSQL_URL = "#####"   # Enter PostGreSQL link
+connection = psycopg2.connect(PGSQL_URL)
 
 # -- SQL Statements --
 
@@ -21,7 +21,7 @@ CREATE_LOGIN_TABLE = """
     login_timestamp INTEGER, 
     FOREIGN KEY (user_id) REFERENCES users (id)
 );"""
-# updates address to latest login or creates new entries each time??
+
 
 CREATE_LOCATION_TABLE = """
     CREATE TABLE IF NOT EXISTS location
@@ -36,7 +36,7 @@ CREATE_LOCATION_TABLE = """
     FOREIGN KEY (user_id) REFERENCES users (id),
     FOREIGN KEY (login_id) REFERENCES login (id)
 );"""
-# updates address to latest login or creates new entries each time??
+
 
 CREATE_PLAYLISTS_TABLE = """
     CREATE TABLE IF NOT EXISTS playlists
@@ -64,9 +64,7 @@ GET_USER_ID = "SELECT id FROM users WHERE username = %s;"
 GET_USER_LATEST_LOCATION = "SELECT * FROM location WHERE user_id = %s ORDER BY login_timestamp DESC LIMIT 1;"
 
 # GET_OTHER_USERS_AREA = ""
-
 # GET_OTHER_USERS_COUNTY = ""
-
 # GET_OTHER_USERS_COUNTRY = ""
 
 
