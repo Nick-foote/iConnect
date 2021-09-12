@@ -1,0 +1,48 @@
+version: "3.7"
+
+services:
+
+  api:
+    build:
+      context: .
+      dockerfile: ./config/app/Dockerfile
+    image: iconnect:api
+    container_name: iconnect
+
+    # host:container port
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./project:/app
+    restart: "on-failure"
+    depends_on:
+      - db
+    networks: 
+      - iconnect-api
+
+  db:
+    image: kartoza/postgis:13.0
+    container_name: iconnect_postgis_db
+    environment:
+      - POSTGRES_DB=db-data
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=superpassword
+      # - POSTGRES_DB=${DB_NAME}
+      # - POSTGRES_USER=${DB_USER}
+      # - POSTGRES_PASSWORD=${DB_PASS}
+    # ports: 
+    #   - "5432:5432"
+    env_file:
+      - ./project/.env
+    restart: "on-failure"
+    volumes:
+      - postgres_data:/var/lib/postgres/data/
+    networks: 
+      - iconnect-api
+
+volumes:
+  postgres_data:
+
+networks:
+  iconnect-api:
+    driver: bridge 

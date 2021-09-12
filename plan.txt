@@ -1,0 +1,18 @@
+My Plan for iConnect
+
+BACKEND
+1) setup user Signup Login with Spotify via SocialAuth
+2) Set up GeoDjango, with location data
+3) Locate closest playlist
+
+
+FRONTEND
+# JS + React
+1) Spotify Login Page
+2) Map Viz
+3) Show nearby users + interaction
+4) Load playlist
+
+
+GENERAL
+How to connect API with React?
