@@ -18,9 +18,8 @@ services:
     restart: "on-failure"
     depends_on:
       - db
-    networks: 
+    networks:
       - iconnect-api
-
 
   db:
     image: kartoza/postgis:13.0
@@ -42,6 +41,19 @@ services:
     networks: 
       - iconnect-api
 
+  client:
+    build: 
+      context: ./client
+      dockerfile: Dockerfile.dev
+    container_name: iconnect_frontend
+    volumes: 
+      - ./app/node_modules
+      - ./client:/app
+    depends_on: 
+      - api
+    networks: 
+      - iconnect-api
+
 
   nginx:
     build: 
@@ -51,14 +63,14 @@ services:
       - 8080:80
     restart: "always"
     depends_on: 
-      - api    
+      - api
     networks: 
       - iconnect-api
 
 
 networks:
   iconnect-api:
-    driver: bridge 
+    driver: bridge
 
 volumes:
   postgres_data:

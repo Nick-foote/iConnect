@@ -8,6 +8,7 @@ from django.urls import path
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('users.urls')),
+    path('', include('playlists.urls')),
     path('social-auth/', include('drf_social_oauth2.urls', namespace='drf')),
     path('social/', include('social_django.urls')),
 ]
