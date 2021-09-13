@@ -22,7 +22,7 @@ class ActivitySerializer(GeoFeatureModelSerializer):
         # read_only_fields = []
 
 
-class PlaylistSerializer(GeoFeatureModelSerializer):
+class PlaylistSerializer(serializers.ModelSerializer):
     """tbc"""
 
     class Meta:
@@ -34,4 +34,3 @@ class PlaylistSerializer(GeoFeatureModelSerializer):
             'created_at',
             'updated_at',
             ]
-        # read_only = True

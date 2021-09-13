@@ -11,7 +11,11 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1", "iconnect"]
+ALLOWED_HOSTS = [
+    "127.0.0.1", 
+    "localhost", 
+    "iconnect",
+    ]
 
 
 
@@ -234,11 +238,13 @@ https://accounts.spotify.com/en/login/facebook?continue=https%3A%2F%2Faccounts.s
 #  --  Leaflet & GeoDjango  --
 
 LEAFLET_CONFIG = {
-    # 'DEFAULT_CENTER': (-0.12, 51.51),                   # London coords
-    'DEFAULT_CENTER': (51.51, -0.12),                   # London coords
+    'DEFAULT_CENTER': (51.51, -0.1),                   # London coords
     'DEFAULT_ZOOM': 8,
     'MAX_ZOOM': 20,
     'SCALE': 'both',                                    # Could fix to only miles
     'ATTRIBUTION_PREFIX': 'API-Music Playlists Map',
 
 }
+
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = None

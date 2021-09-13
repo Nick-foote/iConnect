@@ -8,8 +8,8 @@ from playlists.views import ActivityViewSet, PlaylistViewSet
 
 router = DefaultRouter()
 
-router.register(prefix='api/v1/', viewset=ActivityViewSet, basename='activity')
-router.register(prefix='api/v1/', viewset=PlaylistViewSet, basename='playlist')
+router.register(prefix='api/v1/activities', viewset=ActivityViewSet, basename='activity')
+router.register(prefix='api/v1/playlists', viewset=PlaylistViewSet, basename='playlist')
 
 urlpatterns = [
     path('', include(router.urls)),
