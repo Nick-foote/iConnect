@@ -9,10 +9,11 @@ services:
     image: iconnect:api
     container_name: iconnect
 
-    # host:container port
+    # host-port : container-port
     # now declared in nginx
     # ports:
     #   - "8000:8000"
+
     volumes:
       - ./project:/app
     restart: "on-failure"

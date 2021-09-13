@@ -243,7 +243,6 @@ LEAFLET_CONFIG = {
     'MAX_ZOOM': 20,
     'SCALE': 'both',                                    # Could fix to only miles
     'ATTRIBUTION_PREFIX': 'API-Music Playlists Map',
-
 }
 
 
