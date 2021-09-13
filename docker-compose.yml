@@ -5,13 +5,14 @@ services:
   api:
     build:
       context: .
-      dockerfile: ./config/app/Dockerfile
+      dockerfile: ./config/app/Dockerfile.dev
     image: iconnect:api
     container_name: iconnect
 
     # host:container port
-    ports:
-      - "8000:8000"
+    # now declared in nginx
+    # ports:
+    #   - "8000:8000"
     volumes:
       - ./project:/app
     restart: "on-failure"
@@ -19,6 +20,7 @@ services:
       - db
     networks: 
       - iconnect-api
+
 
   db:
     image: kartoza/postgis:13.0
@@ -40,9 +42,23 @@ services:
     networks: 
       - iconnect-api
 
-volumes:
-  postgres_data:
+
+  nginx:
+    build: 
+      context: .
+      dockerfile: ./config/nginx/Dockerfile.dev
+    ports: 
+      - 8080:80
+    restart: "always"
+    depends_on: 
+      - api    
+    networks: 
+      - iconnect-api
+
 
 networks:
   iconnect-api:
     driver: bridge 
+
+volumes:
+  postgres_data:

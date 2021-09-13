@@ -18,9 +18,11 @@ class PlaylistAdmin(admin.ModelAdmin):
         (_("Info"), {'fields': (
             'name', 
             'uri', 
-            )}),            
-     )
-    # readonly_fields = ()
+            'created_at', 
+            'updated_at', 
+            )}), 
+            )
+    readonly_fields = ['created_at', 'updated_at']
 
 
 @admin.register(Activity)

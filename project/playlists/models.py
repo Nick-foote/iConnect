@@ -3,9 +3,17 @@ from django.contrib.gis.db import models as models
 # from django.utils.translation import gettext_lazy as _
 
 from django.conf import settings
-# class TimeStampedModelGIS
 
-class Activity(models.Model):
+
+class TimeStampedModelGIS(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, editable=False)
+    updated_at = models.DateTimeField(auto_now=True, editable=False)
+
+    class Meta:
+        abstract= True
+
+
+class Activity(TimeStampedModelGIS):
     """Activity/interaction"""
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -18,18 +26,14 @@ class Activity(models.Model):
         )
     location = models.PointField(srid=4326)
     # area = models.models.CharField(max_length=150)
-    created_at = models.DateTimeField(auto_now_add=True, editable=False)
-    updated_at = models.DateTimeField(auto_now=True, editable=False)
 
     class Meta:
         verbose_name_plural = 'Activities'
 
-    def __str__(self):
-        return "my string"
-    # def __str__(self) -> str:
-    #     return f"{self.user.username} Playlist {self.playlist.name} Activity"
+    def __str__(self) -> str:
+        return f"{self.user.username} Playlist {self.playlist.name} Activity"
 
-class Playlist(models.Model):
+class Playlist(TimeStampedModelGIS):
     """Individual item on Spotify"""
     name = models.CharField(
         max_length=250, 
