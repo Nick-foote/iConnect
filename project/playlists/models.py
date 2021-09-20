@@ -1,9 +1,30 @@
-# from django.db import models
+from datetime import date, timedelta
 from django.contrib.gis.db import models as models
 # from django.utils.translation import gettext_lazy as _
 
 from django.conf import settings
 
+
+
+# ------------------------------------------------------------------------------------------------
+# -- MANAGERS --
+
+class RecentPublicManger(models.Manager):
+    """ Returns only public activity with the last three months."""
+
+    def get_queryset(self):
+        today = date.today()
+        three_mnths_ago = today - timedelta(3 * 30)
+        
+        return super().get_queryset().filter(
+            is_private=False,
+            created_at__gte=three_mnths_ago,
+            ) \
+            
+
+
+# ------------------------------------------------------------------------------------------------
+# -- MODELS --
 
 class TimeStampedModelGIS(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
@@ -13,34 +34,29 @@ class TimeStampedModelGIS(models.Model):
         abstract= True
 
 
-class Activity(TimeStampedModelGIS):
+class Playlist(TimeStampedModelGIS):
     """Activity/interaction"""
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name='playlist',
         )
-    playlist = models.ForeignKey(
-        "Playlist", 
-        on_delete=models.CASCADE
-        )
-    location = models.PointField(srid=4326)
-    # area = models.models.CharField(max_length=150)
-
-    class Meta:
-        verbose_name_plural = 'Activities'
-
-    def __str__(self) -> str:
-        return f"{self.user.username} Playlist {self.playlist.name} Activity"
-
-class Playlist(TimeStampedModelGIS):
-    """Individual item on Spotify"""
     name = models.CharField(
         max_length=250, 
         null=True,
         default="un-named",
         )
-    uri = models.CharField(max_length=250)
+    spotify_uri = models.CharField(max_length=250)
+    location = models.PointField(srid=4326, geography=True)
+    is_private =models.BooleanField(default=False)
+    # area = models.models.CharField(max_length=150)
 
-    def __str__(self):
-        return f"{self.name} - {self.uri}"
+    public = RecentPublicManger()
+
+    def __str__(self) -> str:
+        return f"{self.user.username} Playlist {self.name} Activity"
+
+    @property
+    def get_readable_date(self):
+        """Formatting the datetime to date"""
+        return self.created_at.strftime("%a %d-%b-%Y")

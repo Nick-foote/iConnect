@@ -21,6 +21,6 @@
 **/secrets.dev.yaml
 **/values.dev.yaml
 
-README.md
-venv
-v1
+**/README.md
+**/venv
+**/v1

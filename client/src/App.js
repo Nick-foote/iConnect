@@ -1,35 +1,47 @@
-// import logo from './logo.svg';
 import axios from 'axios';
-import { Icon } from 'leaflet';
-import React, { useState } from 'react';
+import { map, Renderer } from 'leaflet';
+import React, { useState, useEffect, useRef } from 'react';
 import { Alert, Spinner } from 'react-bootstrap';
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import L from "leaflet";
 import useSWR from "swr";
+
 import './App.css';
-
-export const icon = new Icon ({
-  iconUrl: 'images/music_icon.png',
-  iconSize: [120, 100],
-  iconAnchor: [25, 48],
-
-  // TODO:  Make shadow png of marker
-  // shadowUrl: 'images/music_icon_shadow.png',   
-  // shadowSize: [],
-  // shadowAnchor: [],
-
-  popupAnchor: [-3, -75],
-});
+import { playlistIcon } from "./constaints.js";
 
 // promise
 const fetcher = (url) => axios.get(url).then((res) => res.data);
+// default = London
+const default_location = [51.51, -0.1]
+// const default_lat = 51.51;
+// const default_long = -0.1;
 
 const App = () => {
-  // declare state
-  const [activeActivities, setActiveActivities] = useState(null);
-  const { data, error } = useSWR('/api/v1/activities', fetcher);
-  const activities = data && !error ? data : {};
-  const position = [51.51, -0.1];
-  const zoom = 14;
+  const [activePlaylists, setActivePlaylists] = useState(null);
+  const [location, setLocation] = useState(default_location);
+  const { data, error } = useSWR('/api/v1/playlists', fetcher);
+  const playlists = data && !error ? data : {};
+  const default_zoom = 14;
+
+  function LocationMarker() {
+    const map = useMap();
+
+    useEffect(() => {
+      map.locate().on("locationfound", function (e) {
+        setLocation(e.latlng);
+        map.flyTo(e.latlng, map.getZoom());
+        const radius = e.accuracy;
+        const circle = L.circle(e.latlng, radius);
+        circle.addTo(map);
+      });
+    }, [map]);
+
+    return location === default_location ? null :  (
+      <Marker position={location}>
+        <Popup>You are here</Popup>
+      </Marker>
+    );
+  }
 
   if (error) {
     return <Alert variant="danger">Please refresh your browser</Alert>;
@@ -51,43 +63,58 @@ const App = () => {
     );
   }
 
-  return (
-    <MapContainer center={position} zoom={zoom}>
-      <TileLayer 
-        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      {activities.features.map((activity) => (
-
-        <Marker
-          key={activity.properties.user}
-          position={[
-            activity.geometry.coordinates[1],
-            activity.geometry.coordinates[0],
-          ]}
-          onclick={() => {
-            setActiveActivities(activity);
-          }}
-          icon={icon}>
-          <Popup
+  return (   
+    <> 
+      <MapContainer center={location} zoom={default_zoom} watch={true}>
+        <TileLayer attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>        
+        <div className="msgLoading">Loading your location</div> 
+        {playlists.features.map((playlist) => (
+          <Marker
+            key={playlist.properties.user}
             position={[
-              activity.geometry.coordinates[1],
-              activity.geometry.coordinates[0],
+              playlist.geometry.coordinates[1],
+              playlist.geometry.coordinates[0],
             ]}
-            onclose={() => {
-              setActiveActivities(null);
-            }}>
-              <div>
-                <h6>{activity.properties.user}</h6>
-                <p>{activity.properties.playlist_name}</p>
-                <p>{activity.properties.created_at}</p>
-                <a href="#">Play Now</a>
-              </div>
+            onclick={() => {
+              setActivePlaylists(playlist);
+            }}
+            icon={playlistIcon}>
+            <Popup
+              position={[
+                playlist.geometry.coordinates[1],
+                playlist.geometry.coordinates[0],
+              ]}
+              onclose={() => {
+                setActivePlaylists(null);
+              }}>
+                <div className="playlistWrapper">
+                  <h6>👤 {playlist.properties.user}</h6>
+                  <p className="playlistName">♫ {playlist.properties.name}</p>
+                  <p>{playlist.properties.date_listened}</p>
+                  <div className="spotifyWrapper">
+                    <a className="spotifylink" href="spotify:playlist:6Nn9XJdB1aqj9dEB0CMIHT">
+                      <img className="spotifyIcon" src="/images/spotify_icon.png" />
+                      <p className="spotifyText">Play Now</p>
+                    </a>
+                  </div>
+                </div>
             </Popup>
           </Marker>      
-      ))}
-    </MapContainer>
+        ))}
+        <LocationMarker />
+      </MapContainer>
+  </>
   );
 };
-
 export default App;
+
+// export default geolocated({
+//   positionOptions: {
+//     enableHighAccuracy: false
+//   },
+//   userDecisionTimeout: 10000        // 10secs
+// })(App);
+
+
+

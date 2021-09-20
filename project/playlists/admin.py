@@ -1,45 +1,28 @@
 from django.contrib import admin
 from django.utils.translation import gettext as _
 from leaflet.admin import LeafletGeoAdmin
-from playlists.models import Activity, Playlist
+from playlists.models import Playlist
 
 # ------------------------------------------------------------------------------------------------
 #   --   Models    --
 
 
 @admin.register(Playlist)
-class PlaylistAdmin(admin.ModelAdmin):
+class PlaylistAdmin(LeafletGeoAdmin):
     ordering = ['id']
     list_display = ['id', 'name']
-    search_fields = ['name']
-    list_per_page = 50
-
-    fieldsets = (
-        (_("Info"), {'fields': (
-            'name', 
-            'uri', 
-            'created_at', 
-            'updated_at', 
-            )}), 
-            )
-    readonly_fields = ['created_at', 'updated_at']
-
-
-@admin.register(Activity)
-class ActivityAdmin(LeafletGeoAdmin):
-    ordering = ['id']
-    list_display = ['id', 'user', 'playlist', 'location']
-    search_fields = ['name']
+    search_fields = ['user', 'name']
     list_per_page = 50
 
     fieldsets = (
         (_("Info"), {'fields': (
             'user', 
-            'playlist', 
+            'name', 
+            'spotify_uri', 
             'location', 
             'created_at', 
             'updated_at', 
+            'is_private', 
             )}), 
             )
     readonly_fields = ['created_at', 'updated_at']
-

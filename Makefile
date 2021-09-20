@@ -5,13 +5,13 @@ ifneq (,$(wildcard ./.env))
 endif
 
 build:
-	docker-compose build
+	docker-compose build --remove-orphans
 
 rebuild-api:
 	docker-compose up -d --no-deps --build api
 
 up:
-	docker-compose up --remove-orphans
+	docker-compose up
 
 down:
 	docker-compose down

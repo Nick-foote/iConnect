@@ -1,41 +1,67 @@
-from django.db import models
+# from datetime import datetime
 from rest_framework import serializers
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 
-from playlists.models import Playlist, Activity
+from playlists.models import Playlist
 
 
-class PlaylistSerializer(serializers.ModelSerializer):
-    """tbc"""
+
+class PlaylistGetSerializer(GeoFeatureModelSerializer):
+    """Creating a Playlist"""
+    user = serializers.CharField(source='user.username')
+    date_listened = serializers.SerializerMethodField(source='user.get_readable_date')
+    distance_to_user = serializers.SerializerMethodField()
 
     class Meta:
 
         model = Playlist
         fields = [
-            'name',
-            'uri',
-            'created_at',
-            'updated_at',
-            ]
-
-
-class ActivitySerializer(GeoFeatureModelSerializer):
-    """tbc"""
-    user = serializers.CharField(source='user.username')
-    playlist_name = serializers.CharField(source='playlist.name')
-    playlist_uri = serializers.CharField(source='playlist.uri')
-
-    class Meta:
-
-        model = Activity
-        fields = [
             'user',
-            'playlist_name',
-            'playlist_uri',
+            'name',
+            'spotify_uri',
             'location',
-            'created_at',
+            'date_listened',
+            'distance_to_user',
             'updated_at',
             ]
         geo_field = 'location'
-        # read_only_fields = []
+        read_only_fields = fields
+
+    def get_date_listened(self, obj):
+        return obj.get_readable_date
+
+    def get_distance_to_user(self, obj):
+        """Calculating how far away the user was to the current auth user when the
+        playlist was listened to."""
+        pass
+
+
+class PlaylistCreateSerializer(serializers.Serializer):
+    """Creating a Playlist only, recording time the user listened to."""
+
+    latitude = serializers.FloatField()
+    longitude = serializers.FloatField()
+                
+    
+    def save(self, user_location=None):
+        user = self._get_user()
+        if all(user_location, user):
+            Playlist.objects.create(
+                user=user,
+                location=user_location,
+                # name=
+                # spotify_uri=
+            )
+        pass
+
+    def _get_user(self):
+        request = self.context.get('request', None)
+        if request:
+            return request.user
+        else:
+            return None
+
+    def _get_recent_spotify_playlist(self):
+        """"""
+        pass
 
