@@ -8,12 +8,10 @@ services:
       dockerfile: ./config/app/Dockerfile.dev
     image: iconnect:api
     container_name: iconnect
-
     # host-port : container-port
     # now declared in nginx
-    ports:
-      - "8000:8000"
-
+    # ports:
+    #   - "8000:8000"
     volumes:
       - ./project:/app
     restart: "on-failure"
@@ -42,31 +40,31 @@ services:
     networks: 
       - iconnect-api
 
-  # client:
-  #   build: 
-  #     context: ./client
-  #     dockerfile: Dockerfile.dev
-  #   container_name: iconnect_frontend
-  #   volumes: 
-  #     - ./app/node_modules
-  #     - ./client:/app
-  #   depends_on: 
-  #     - api
-  #   networks: 
-  #     - iconnect-api
+  client:
+    build: 
+      context: ./client
+      dockerfile: Dockerfile.dev
+    container_name: iconnect_frontend
+    volumes: 
+      - ./app/node_modules
+      - ./client:/app
+    depends_on: 
+      - api
+    networks: 
+      - iconnect-api
 
 
-  # nginx:
-  #   build: 
-  #     context: .
-  #     dockerfile: ./config/nginx/Dockerfile.dev
-  #   ports: 
-  #     - 8080:80
-  #   restart: "always"
-  #   depends_on: 
-  #     - api
-  #   networks: 
-  #     - iconnect-api
+  nginx:
+    build: 
+      context: .
+      dockerfile: ./config/nginx/Dockerfile.dev
+    ports: 
+      - 8080:80
+    restart: "always"
+    depends_on: 
+      - api
+    networks: 
+      - iconnect-api
 
 
 networks:

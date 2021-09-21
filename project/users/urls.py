@@ -7,29 +7,8 @@ from users import views
 app_name = 'users'
 
 urlpatterns = [
-
     path('accounts/login/',
          views.SpotifyLoginView.as_view(),
-         name='temp',
-         ),
-
-    path('users/me/',
-         views.ProfileView.as_view(),
-         name='profile',
-         ),
-
-    path('test/login/',
-         views.TESTSpotifyLoginView.as_view(),
-         name='wiplogin1',
-         ),
-
-    path('my-redirect/',
-         views.SpotifyLoginView.as_view(),
-         name='wiplogin2',
-         ),
-
-    path('spotify-auth/',
-         views.SpotifyAuthView.as_view(),
-         name='wiplogin3',
+         name='sp-login',
          ),
 ]

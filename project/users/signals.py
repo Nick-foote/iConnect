@@ -1,17 +1,14 @@
 import logging
 
 from django.conf import settings
-from django.db import IntegrityError
-from django.db.models import F
 from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
-from django.urls import reverse
 
 from rest_framework.authtoken.models import Token
 from users.models import Profile
 
 
-logger = logging.getLogger('console-basic')
+logger = logging.getLogger(__name__)
 
 # ---- USERS ----
 

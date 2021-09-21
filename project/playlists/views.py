@@ -8,15 +8,11 @@ from playlists.models import Playlist
 from playlists.serializers import PlaylistGetSerializer, PlaylistCreateSerializer
 from playlists.spotify_manager import SpotifyManager
 
-# TODO: add pagination. Zooming out gets next
+# TODO: add pagination. Zooming out gets next batch of results
 
 class PlaylistViewSet(viewsets.ModelViewSet):
     """Returns only playlists listened to in the last three months.
     Excludes private data."""    
-
-    def __init__(self, **kwargs):
-        self.user_location = self.get_user_location()
-        super().__init__(**kwargs)
 
     def get_serializer_class(self):
         if self.action in ['retrieve', 'list']:
@@ -29,37 +25,37 @@ class PlaylistViewSet(viewsets.ModelViewSet):
         Only returns the closest 20 playlists to the current user, 
         with a spatial limit of 25miles.
         """
-        # TODO: exclude current auth user's playlists so a user doesn't see their own activity
-        
+        self.user_location = self.get_user_location(self.request)
         if not self.user_location:
             queryset = Playlist.public.all()
         else:
             queryset = Playlist.public.filter(
-                location__distance_lte=(self.user_location, D(mi=25))
-                )
-            
-            #     .order_by(GeometryDistance("location", user_location))
-            #     # could annoatate distance for later use
+                    location__distance_lte=(self.user_location, D(mi=25))) \
+                .order_by(GeometryDistance("location", self.user_location))
+            # .exclude(user=self.request.user) \
+            # could annoatate distance for later use
             queryset = queryset[:20]  
 
         return queryset
 
     def retrieve(self, request, *args, **kwargs):
-        self.connect_to_spotify()
+        
+        self.user = request.user
+        # self.connect_to_spotify(request.user)
         return super().retrieve(request, *args, **kwargs)
 
-    def get_user_location(self):
+    def get_user_location(self, request):
         """Retrieve user coordinates from the frontend and converts the param to two floats"""
-        user_coords = self.request.GET.get("latlong", None)
+        user_coords = request.GET.get("latlong", None)
         if not user_coords:
             self.user_latlong = None
         lat, long = [float(x) for x in user_coords.split(",")[:2]]
         # requires swappping coords around for PostGIS
         return Point(long, lat, srid=4326)
 
-    def connect_to_spotify(self):
+    def connect_to_spotify(self, user):
         """Confirms the username is associated to a Spotify Account and then uploads"""
-        sp = SpotifyManager(self.request.user)
+        sp = SpotifyManager(user)
         user_on_spotify = sp.user_query()
         if not user_on_spotify:
             return

@@ -7,17 +7,22 @@ from django.urls import path
 
 PREFIX_API = 'api/v1/'
 
+api_patterns = [
+    path(f'', include('users.urls')),
+    path(f'', include('playlists.urls')),
+    path(f'social-auth/', include('drf_social_oauth2.urls', namespace='drf')),
+    path(f'social/', include('social_django.urls')),
+]
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path(f'{PREFIX_API}', include('users.urls')),
-    path(f'{PREFIX_API}', include('playlists.urls')),
-    path(f'{PREFIX_API}social-auth/', include('drf_social_oauth2.urls', namespace='drf')),
-    path(f'{PREFIX_API}social/', include('social_django.urls')),
+    path(f'{PREFIX_API}', include(api_patterns)),
 ]
 
 if settings.DEBUG:
     from drf_spectacular.views import (
         SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView)
+    
     urlpatterns += [ 
         path('api/schema', SpectacularAPIView.as_view(), name='schema'),
         path('api/schema/swagger/ui', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
