@@ -5,12 +5,14 @@ from django.contrib import admin
 from django.urls import path
 
 
+PREFIX_API = 'api/v1/'
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('users.urls')),
-    path('', include('playlists.urls')),
-    path('social-auth/', include('drf_social_oauth2.urls', namespace='drf')),
-    path('social/', include('social_django.urls')),
+    path(f'{PREFIX_API}', include('users.urls')),
+    path(f'{PREFIX_API}', include('playlists.urls')),
+    path(f'{PREFIX_API}social-auth/', include('drf_social_oauth2.urls', namespace='drf')),
+    path(f'{PREFIX_API}social/', include('social_django.urls')),
 ]
 
 if settings.DEBUG:
@@ -24,7 +26,7 @@ if settings.DEBUG:
 
     urlpatterns += (
         static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) 
-        # + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) 
+        + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) 
     )
 
     import debug_toolbar

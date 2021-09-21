@@ -146,6 +146,7 @@ class SpotifyLoginView(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
 
         print(f"\n request: {request}\n")
+        print(f"\n request.body: {request.body}\n")
         print(f"\n args: {args}\n")
         print(f"\n kwargs: {kwargs}\n")
         

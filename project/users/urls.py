@@ -6,8 +6,6 @@ from users import views
 
 app_name = 'users'
 
-# router = DefaultRouter()
-
 urlpatterns = [
 
     path('accounts/login/',
@@ -22,16 +20,16 @@ urlpatterns = [
 
     path('test/login/',
          views.TESTSpotifyLoginView.as_view(),
-         name='wiplogin',
+         name='wiplogin1',
          ),
 
     path('my-redirect/',
          views.SpotifyLoginView.as_view(),
-         name='wiplogin',
+         name='wiplogin2',
          ),
 
     path('spotify-auth/',
          views.SpotifyAuthView.as_view(),
-         name='wiplogin',
+         name='wiplogin3',
          ),
 ]

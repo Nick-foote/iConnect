@@ -46,6 +46,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'social_django.middleware.SocialAuthExceptionMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -137,22 +138,26 @@ STATICFILES_DIRS = (
 
 AUTH_USER_MODEL = 'users.User'
 
-LOGIN_URL = '/'
-# LOGIN_REDIRECT_URL = '/logged-in'
-LOGOUT_REDIRECT_URL = '/logged-out'
-
-# If over-riding process
-# SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/users/me/'
 
 # ----------------------------------------------------------------------------
 #  --  Social Authentication  --
 
+# LOGIN_URL = '/abc/'
+# LOGIN_REDIRECT_URL = '/logged-in'
+# LOGOUT_REDIRECT_URL = '/logged-out'
+
+# If over-riding process
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/api/v1/my-redirect/'
+# SOCIAL_AUTH_RAISE_EXCEPTIONS = False
+
+
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
+
 
 AUTHENTICATION_BACKENDS = (
     'drf_social_oauth2.backends.DjangoOAuth2',
     'social_core.backends.spotify.SpotifyOAuth2',
-    'django.contrib.auth.backends.ModelBackend'   
+    'django.contrib.auth.backends.ModelBackend',
 )
 
 SOCIAL_AUTH_USER_FIELDS = (
@@ -204,34 +209,11 @@ CLIENT_SECRET = os.environ.get("CLIENT_SECRET")
 
 # spotify_redirect_uri = "http://127.0.0.1:8000/social/complete/spotify/"
 spotify_redirect_uri = "http://127.0.0.1:8000/my-redirect/"
-scope = ['user-read-email','user-library-read']
+scope = ['user-read-email', 'user-library-read']
 
-# SOCIAL_AUTH_SPOTIFY_SCOPE = scope
 SOCIAL_AUTH_SPOTIFY_KEY = os.environ.get("SPOTIFY_CLIENT_ID")
 SOCIAL_AUTH_SPOTIFY_SECRET = os.environ.get("SPOTIFY_CLIENT_SECRET")
-
-
-
-
-social_auth_login_for_spotify = """
-    https://accounts.spotify.com/en/login?
-    continue=https:%2F%2Faccounts.spotify.com%2Fauthorize%3F
-    client_id%3D9f660f6108d44080b18f15b3eda4a432%26
-    redirect_uri%3Dhttp%253A%252F%252F127.0.0.1%253A8000%252Fsocial%252Fcomplete%252Fspotify%252F%26
-    state%3DPua2w1KmaXJYhG5J9vuJez5TMMPyqsty%26
-    response_type%3Dcode
-"""
-
-fb_redirect = """
-https://www.facebook.com/v7.0/dialog/oauth?
-client_id=174829003346&
-state=AQD0a%2FInADovwsKdigcIsX%2Fsv%2FtymvAZCdGpi6KGpI%2FGyraeljBRqZdpRMglULUY0rVxpazHVzD4GrrFTbWBDC7RJX8qrrCZACUjm58bqUkOdwtZg%2FCa02HU25wdbmRR8EQY08Ky5zANfV4cqQm6T2l8TPlC6hjelk056o55VZs2%2Fqp%2FSB95UHGxOmpzFLy6zKKRXfJ6bSlnbSUAjUZfsgo9fvVbo3u8g57Im5qNXwdKMk7%2FMsLqDVJhqwCsI7oWtpLk%2FHA2LlltkON9UcQfeyQYx6m382btbl394A6sE4quNU3SleGrCHgkloe7%2B9ReKJasXZK%2BLarQEIgmfdQBiiglnw4NuFj3CujqbuQ6jCbx9P7kQuKVwFd5aXEBsag6kMUl7mI%2FaJnpW%2FI48RJAQ17Lt5E8MnWogMOPWYazTVxdzsQd3llhwuj5yoE2Cy6fs%2FeB7%2FgPThTXXkCkYnJYpFrrzhGJ0dpjdOoCLlxNUk%2FDwekCS%2B4SiA%3D%3D&
-redirect_uri=https%3A%2F%2Faccounts.spotify.com%2Flogin%2Ffacebook%2Fredirect
-"""
-
-unsure = """
-https://accounts.spotify.com/en/login/facebook?continue=https%3A%2F%2Faccounts.spotify.com%2Fauthorize%3Fclient_id%3D9f660f6108d44080b18f15b3eda4a432%26redirect_uri%3Dhttp%253A%252F%252F127.0.0.1%253A8000%252Fsocial%252Fcomplete%252Fspotify%252F%26state%3DPua2w1KmaXJYhG5J9vuJez5TMMPyqsty%26response_type%3Dcode"""
-
+SOCIAL_AUTH_SPOTIFY_SCOPE = scope
 
 
 # ----------------------------------------------------------------------------

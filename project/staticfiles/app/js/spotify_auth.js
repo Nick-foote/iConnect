@@ -1,4 +1,4 @@
-const redirect_uri = "http://127.0.0.1:8000/my-redirect/";
+const redirect_uri = "http://127.0.0.1:8080/my-redirect/";
 // const client_id = "9f660f6108d44080b18f15b3eda4a432";
 // const client_secret = "8221d6445e064eeebb8a2d7439f0aa58";
 const client_id = "";

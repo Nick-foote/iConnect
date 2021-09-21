@@ -1,18 +1,27 @@
+
 My Plan for iConnect
 
 BACKEND
 1) setup user Signup Login with Spotify via SocialAuth
-2) Set up GeoDjango, with location data
-3) Locate closest playlist
+2) Set up GeoDjango, with location data  #done
+3) Locate closest playlist #skip as have map-viz
 
 
-FRONTEND
-# JS + React
+FRONTEND: JS + React
 1) Spotify Login Page
-2) Map Viz
-3) Show nearby users + interaction
-4) Load playlist
+2) Map Viz  #done
+3) Show nearby users + interaction  #done
+4) get playlist URI and open in spotify
+
+
+
+STILL TO WORK OUT
+* user logging in with Spotify SocialAuth, and getting token
+* Sending the spotify token to django to swap for auth token
+* getting user's playlist URI to add to DB
+* sending fetch get request when we have the user's location
 
 
 GENERAL
-How to connect API with React?
+how to send Post requests?
+

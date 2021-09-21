@@ -9,12 +9,13 @@ import useSWR from "swr";
 import './App.css';
 import { playlistIcon } from "./constaints.js";
 
-// promise
-const fetcher = (url) => axios.get(url).then((res) => res.data);
-// default = London
+
 const default_location = [51.51, -0.1]
-// const default_lat = 51.51;
-// const default_long = -0.1;
+const fetcher = (url) => axios.get(
+    url, 
+    {params: {latlong: `${default_location}`}}
+  ).then((res) => res.data);
+
 
 const App = () => {
   const [activePlaylists, setActivePlaylists] = useState(null);
@@ -93,7 +94,7 @@ const App = () => {
                   <p className="playlistName">♫ {playlist.properties.name}</p>
                   <p>{playlist.properties.date_listened}</p>
                   <div className="spotifyWrapper">
-                    <a className="spotifylink" href="spotify:playlist:6Nn9XJdB1aqj9dEB0CMIHT">
+                    <a className="spotifylink" href={"spotify:playlist:"+playlist.properties.spotify_uri}>
                       <img className="spotifyIcon" src="/images/spotify_icon.png" />
                       <p className="spotifyText">Play Now</p>
                     </a>
@@ -108,13 +109,3 @@ const App = () => {
   );
 };
 export default App;
-
-// export default geolocated({
-//   positionOptions: {
-//     enableHighAccuracy: false
-//   },
-//   userDecisionTimeout: 10000        // 10secs
-// })(App);
-
-
-

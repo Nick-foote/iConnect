@@ -1,9 +1,7 @@
 from datetime import date, timedelta
 from django.contrib.gis.db import models as models
-# from django.utils.translation import gettext_lazy as _
 
 from django.conf import settings
-
 
 
 # ------------------------------------------------------------------------------------------------
@@ -49,7 +47,6 @@ class Playlist(TimeStampedModelGIS):
     spotify_uri = models.CharField(max_length=250)
     location = models.PointField(srid=4326, geography=True)
     is_private =models.BooleanField(default=False)
-    # area = models.models.CharField(max_length=150)
 
     public = RecentPublicManger()
 
