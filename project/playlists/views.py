@@ -14,7 +14,7 @@ class PlaylistViewSet(viewsets.ModelViewSet):
     """Returns only playlists listened to in the last three months.
     Excludes private data."""    
 
-    def __init__(self, **kwargs: Any) -> None:
+    def __init__(self, **kwargs):
         self.user_location = self.get_user_location()
         super().__init__(**kwargs)
 

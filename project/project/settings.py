@@ -204,8 +204,6 @@ CLIENT_SECRET = os.environ.get("CLIENT_SECRET")
 
 
 
-# DOMAIN_ADDRESS = os.environ.get("DOMAIN_ADDRESS")
-# spotify_redirect_uri = f'{DOMAIN_ADDRESS}/callback'
 
 # spotify_redirect_uri = "http://127.0.0.1:8000/social/complete/spotify/"
 spotify_redirect_uri = "http://127.0.0.1:8000/my-redirect/"
@@ -214,6 +212,7 @@ scope = ['user-read-email', 'user-library-read']
 SOCIAL_AUTH_SPOTIFY_KEY = os.environ.get("SPOTIFY_CLIENT_ID")
 SOCIAL_AUTH_SPOTIFY_SECRET = os.environ.get("SPOTIFY_CLIENT_SECRET")
 SOCIAL_AUTH_SPOTIFY_SCOPE = scope
+SOCIAL_REDIRECT_URL = spotify_redirect_uri
 
 
 # ----------------------------------------------------------------------------

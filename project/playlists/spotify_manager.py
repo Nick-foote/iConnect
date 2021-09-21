@@ -8,7 +8,7 @@ from playlists.models import Playlist
 
 SOCIAL_AUTH_SPOTIFY_KEY = settings.SOCIAL_AUTH_SPOTIFY_KEY
 SOCIAL_AUTH_SPOTIFY_SECRET = settings.SOCIAL_AUTH_SPOTIFY_SECRET
-SPOTIFY_REDIRECT_URI = settings.spotify_redirect_uri
+SPOTIFY_REDIRECT_URI = settings.SOCIAL_REDIRECT_URL
 SOCIAL_AUTH_SPOTIFY_SCOPE = settings.SOCIAL_AUTH_SPOTIFY_SCOPE
 
 
@@ -60,5 +60,5 @@ class SpotifyManager:
             )
         except ValueError:
             logger.error(f"Playlist Creation Failed - User {self.user.username!r}")
-            
+
         return
