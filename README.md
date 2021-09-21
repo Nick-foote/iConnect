@@ -26,7 +26,7 @@ When finished you can remove container and volumes:
 
 ```make down-v```
 
-\
+
 ## Preview of working app:
 \
 ![recording gif](https://media.giphy.com/media/rC9AYN9xqbakqAKnfF/giphy-downsized-large.gif)
