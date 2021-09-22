@@ -31,17 +31,17 @@ class PlaylistViewSet(viewsets.ModelViewSet):
         else:
             queryset = Playlist.public.filter(
                     location__distance_lte=(self.user_location, D(mi=25))) \
+                .exclude(user=self.request.user) \
                 .order_by(GeometryDistance("location", self.user_location))
-            # .exclude(user=self.request.user) \
             # could annoatate distance for later use
-            queryset = queryset[:20]  
+            queryset = queryset[:20]  # to set up pagination*
 
         return queryset
 
     def retrieve(self, request, *args, **kwargs):
         
-        self.user = request.user
-        # self.connect_to_spotify(request.user)
+        self.user = request.user if request.user else None
+        self.connect_to_spotify(request.user)
         return super().retrieve(request, *args, **kwargs)
 
     def get_user_location(self, request):
