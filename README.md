@@ -29,4 +29,4 @@ When finished you can remove container and volumes:
 
 ## Preview of working app:
 \
-![recording gif](https://media.giphy.com/media/90VMCIssWzcyTOPP9N/giphy.gif)
+![recording gif](https://media.giphy.com/media/rC9AYN9xqbakqAKnfF/giphy-downsized-large.gif)
